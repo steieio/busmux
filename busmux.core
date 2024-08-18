@@ -1,0 +1,67 @@
+CAPI=2:
+name : ::busmux:1.1.1
+
+filesets:
+  busmux:
+    files:
+      - busmux.v : {file_type : verilogSource}
+      - tworegs.v : {file_type : verilogSource}
+      - threeregs.v : {file_type : verilogSource}
+      - fourregs.v : {file_type : verilogSource}
+      - fiveregs.v : {file_type : verilogSource}
+
+  cyc5000:
+    files:
+      - cyc5000/cyc5000.sdc : {file_type : SDC}
+      - cyc5000/pinmap.tcl  : {file_type: tclSource}
+
+  de10_nano:
+    files:
+      - de10_nano/de10_nano.sdc : {file_type : SDC}
+      - de10_nano/pinmap.tcl  : {file_type : tclSource}
+
+  max1000:
+    files:
+      - max1000/max1000.sdc : {file_type : SDC}
+      - max1000/pinmap.tcl  : {file_type: tclSource}
+
+
+targets:
+  default: &default
+    filesets : [busmux]
+    toplevel: ["is_toplevel? (busmux)"]
+
+  cyc5000:
+    <<: *default
+    default_tool : quartus
+    filesets_append : [cyc5000]
+#    parameters : [clk_freq_hz=12000000]
+    tools:
+      quartus:
+        family : Cyclone V
+        device : 5CEBA2U15C8N
+    toplevel: busmux
+
+  de10_nano:
+    default_tool : quartus
+    description : Terasic DE10 Nano Kit
+    filesets : [busmux, de10_nano]
+#    parameters : [clk_freq_hz=50000000]
+    tools:
+      quartus:
+        family : Cyclone V
+        device : 5CSEBA6U23I7
+        board_device_index : 2
+    toplevel: busmux
+
+  max1000:
+    <<: *default
+    default_tool : quartus
+    filesets_append : [max1000]
+#    parameters : [clk_freq_hz=12000000]
+    tools:
+      quartus:
+        family : MAX 10
+        device : 10M08SAU169C8G
+    toplevel: busmux
+

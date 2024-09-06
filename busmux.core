@@ -13,7 +13,7 @@ filesets:
   agilex5:
     files:
       - agilex5/agilex5.sdc : {file_type : SDC}
-      - agi/agilex5_dk-a5e065bb32aes1.tcl  : {file_type: tclSource}
+      - agilex5/agilex5_dk-a5e065bb32aes1.tcl  : {file_type: tclSource}
 
   cyc5000:
     files:
@@ -30,7 +30,6 @@ filesets:
       - max1000/max1000.sdc : {file_type : SDC}
       - max1000/pinmap.tcl  : {file_type: tclSource}
 
-
 targets:
   default: &default
     filesets : [busmux]
@@ -40,18 +39,16 @@ targets:
     <<: *default
     default_tool : quartus
     filesets_append : [agilex5]
-#    parameters : [clk_freq_hz=100000000]
     tools:
       quartus:
         family: Agilex
         device: A5ED065BB32AE6SR0
-   toplevel: busmux
+    toplevel: busmux
 
   cyc5000:
     <<: *default
     default_tool : quartus
     filesets_append : [cyc5000]
-#    parameters : [clk_freq_hz=12000000]
     tools:
       quartus:
         family : Cyclone V
@@ -62,7 +59,6 @@ targets:
     default_tool : quartus
     description : Terasic DE10 Nano Kit
     filesets : [busmux, de10_nano]
-#    parameters : [clk_freq_hz=50000000]
     tools:
       quartus:
         family : Cyclone V
@@ -74,10 +70,28 @@ targets:
     <<: *default
     default_tool : quartus
     filesets_append : [max1000]
-#    parameters : [clk_freq_hz=12000000]
     tools:
       quartus:
         family : MAX 10
         device : 10M08SAU169C8G
     toplevel: busmux
+
+  avant:
+    <<: *default
+    default_tool : radiant
+    description : Lattice Avant E-Series
+    tools:
+      radiant:
+        part: LAV-AT-E70ES1-3LFG1156C
+    toplevel: busmux
+
+  zuboard:
+    <<: *default
+    default_tool : vivado
+    description : Avnet ZUBOARD 
+    tools:
+      vivado:
+        part : xczu1cg-sbva484-1-e
+    toplevel: busmux
+
 

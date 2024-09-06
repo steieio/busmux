@@ -8,7 +8,8 @@ module fiveregs #(
     input  wire               i_we,
     input  wire [7:0]         i_addr,
     input  wire [(DATAW-1):0] i_data,
-    output wire [(DATAW-1):0] o_data
+    output wire [(DATAW-1):0] o_data,
+    output wire               o_xor
 );
 
     reg [(DATAW-1):0] reg0;
@@ -20,6 +21,7 @@ module fiveregs #(
     reg [(DATAW-1):0] r_data;
 
     assign o_data[(DATAW-1):0] = r_data[(DATAW-1):0];
+    assign o_xor = ^{reg4, reg3, reg2, reg1, reg0};
 
     always @(posedge i_clk) begin
         if (i_rst) begin

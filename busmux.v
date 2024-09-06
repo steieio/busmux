@@ -10,13 +10,19 @@ module busmux #(
     input  wire [7:0]         i_addr,
     input  wire [(DATAW-1):0] i_data,
     output wire               o_ack,
-    output wire [(DATAW-1):0] o_data
+    output wire [(DATAW-1):0] o_data, 
+    output wire               o_xor
 );
 
     wire [(DATAW-1):0] r2_data;
     wire [(DATAW-1):0] r3_data;
     wire [(DATAW-1):0] r4_data;
     wire [(DATAW-1):0] r5_data;
+
+    wire              xor2;
+    wire              xor3;
+    wire              xor4;
+    wire              xor5;
 
     reg               r2_we;
     reg               r3_we;
@@ -29,6 +35,7 @@ module busmux #(
 
     assign o_ack = r_ack;
     assign o_data = r_data;
+    assign o_xor = ^{xor5, xor4, xor3, xor2};
 
     tworegs r2 (
         .i_clk (i_clk),
@@ -37,6 +44,7 @@ module busmux #(
         .i_addr (i_addr),
         .i_data (i_data),
         .o_data (r2_data),
+        .o_xor (xor2)
     );
 
     threeregs r3 (
@@ -46,6 +54,7 @@ module busmux #(
         .i_addr (i_addr),
         .i_data (i_data),
         .o_data (r3_data),
+        .o_xor (xor3)
     );
 
     fourregs r4 (
@@ -55,6 +64,7 @@ module busmux #(
         .i_addr (i_addr),
         .i_data (i_data),
         .o_data (r4_data),
+        .o_xor (xor4)
     );
 
     fiveregs r5 (
@@ -64,6 +74,7 @@ module busmux #(
         .i_addr (i_addr),
         .i_data (i_data),
         .o_data (r5_data),
+        .o_xor (xor5)
     );
 
     always @(posedge i_clk) begin
